@@ -144,12 +144,12 @@ nav svg {
   color: #d1d5db;
   font-size: 16px;
 }
-#introsection::before,
+/* #introsection::before,
 #introsection::after {
   content: "<HomePage/>";
   float: left;
   color: rgb(0, 134, 244);
-}
+} */
 #introsection {
   text-align: left;
   padding: 20px;
@@ -294,12 +294,25 @@ form button {
   background: rgb(65, 65, 78);
   border: none;
   position: absolute;
-  top: 20%;
+  top: 13%;
   right: 15px;
   width: 35px;
   height: 45px;
 }
-
+.llmselector {
+  color: rgb(65, 65, 78);
+  position: absolute;
+  top: 20%;
+  right: -50px;
+  width: 0px;
+  height: 0px;
+}
+.llmselector select {
+  background-color: rgb(65, 65, 78); /* Change background color to grey */
+  color: white; /* Change text color to white */
+  border: none; /* Remove border */
+  padding: 5px;
+}
 @media (hover: hover) {
   button:hover {
     cursor: pointer;
@@ -428,4 +441,14 @@ form button {
   #loginButton {
     font-size: 22px;
   }
+}
+.selectWrapper {
+  position: absolute;
+  top: -100%; /* Position the dropdown list above the input */
+  width: 100%;
+  z-index: 1; /* Ensure the dropdown appears above other elements */
+}
+
+.selectWrapper select {
+  width: 100%;
 }

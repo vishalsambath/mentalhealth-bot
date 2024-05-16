@@ -5,27 +5,28 @@ const IntroSection = () => {
   return (
     <div id="introsection">
       <h1>
-        Introducing Talkbot
-        <BotResponse response=" - The Ultimate AI Assistant" />
+        Ambaan
+        <BotResponse response=" - Your Faithful Companion" />
       </h1>
       <h2>
-        A cutting-edge AI-powered app that provides instant answers to any
-        question you may have. With Talkbot, you'll never be left searching for
-        answers again. Whether you need information for school or work, or just
-        want to know the latest news, Talkbot has you covered.
+        Ambaan Bot is an AI therapist. This is a confidential and safe space designed to support you emotionally.
+
+      
       </h2>
       Features:
       <ul>
-        <li>Instant answers to any question</li>
-        <li>Deep learning technology that improves with usage</li>
-        <li>Continuously Learning</li>
+        <li>Instant support to any of your questions</li>
+        <li>Choose between 3 LLMs - OpenAI, LLaMa3 and Mistral 7b</li>
         <li>User-friendly interface</li>
-        <li>Available 24/7</li>
       </ul>
       <p>
-        Say goodbye to endless searching and typing, and say hello to TalkBot,
-        your personal AI assistant. Try it now and see for yourself how TalkBot
-        can make your life easier.
+       Disclaimer : 
+       <ul>
+        <li>This is not a replacement for professional help</li>
+        <li>Use with Caution</li>
+        <li>Not for emergency situations</li>
+      </ul>
+
       </p>
     </div>
   );

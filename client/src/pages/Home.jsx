@@ -10,6 +10,7 @@ import SvgComponent from "../components/SvgComponent";
 const Home = () => {
   const [showMenu, setShowMenu] = useState(false);
   const [inputPrompt, setInputPrompt] = useState("");
+  const [selectedOption,setSelectedOption]= useState("OpenAI")
   const [chatLog, setChatLog] = useState([]);
   const [err, setErr] = useState(false);
   const [responseFromAPI, setReponseFromAPI] = useState(false);
@@ -32,43 +33,104 @@ const Home = () => {
 
       async function callAPI() {
         try {
+          console.log(selectedOption)
+          if(selectedOption=="OpenAI"){
+            console.log("here")
+            const requestBody = JSON.stringify({
+              // "model": "ft:gpt-3.5-turbo-0125:next-15:dnb:9HzrH2x0",
+              "model": "ft:gpt-3.5-turbo-0125:next-15:dnb:9I1HgpAn",
+              "messages": [
+                  { "role": "system", "content": "You are a professional psychologist. Don't break character at any point.Remember that you are the pschologist here when answering. Follow the steps given below to answer user requests.1. Paraphrase the user query and try to understand  in simple terms 2. Always ask open-ended questions without fail about the query and end the conversation with a question to further probe user thoughts.3.Reassure and empathise with the user.4 Give a concrete solution that the user can implement or work on.5.Educate the user about the situation and resources that they can access (psychoeducation is very important). Dont forget to Always end the conversation with an open ended question" },
+                  ...chatLog.map((item) => ({ "role": "user", "content": item.chatPrompt })),
+                  { "role": "user", "content": inputPrompt }
+              ],
+              "temperature": 0.5
+          });
+      
+          console.log('Request Body:', requestBody); // Log the request body
+          // const response = await fetch("https://api.openai.com/v1/chat/completions", {
+
           const response = await fetch("https://api.openai.com/v1/chat/completions", {
               method: "POST",
               headers: {
                   "Content-Type": "application/json",
                   "Authorization": "Bearer sk-xxx"
               },
-              body: JSON.stringify({
-                  "model": "gpt-3.5-turbo",
-                  "messages": [
-                      ...chatLog.map((item) => ({ role: "user", content: item.chatPrompt })),
-                      { role: "user", content: inputPrompt }
-                  ],
-                  "temperature": 0.7
-              }),
+              body: requestBody, // Pass the requestBody variable here
           });
-  
+          console.log("response,",response)
+      
           const data = await response.json();
           if (data.choices && data.choices.length > 0) {
+              setChatLog([
+                  ...chatLog,
+                  {
+                      chatPrompt: inputPrompt,
+                      botMessage: data.choices[0].message.content,
+                  },
+              ]);
+          } else {
+              console.error('No choices found in the response.');
+          }
+      
+          setErr(false);
+
+          }
+          else if (selectedOption=="LLaMa3"){
+          console.log('Request Body:', inputPrompt); //
+          const response = await fetch("https://1014-34-16-154-14.ngrok-free.app/process-message", {
+              method: "POST",
+              headers: {
+                  "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ message: inputPrompt }), // Pass the inputPrompt as JSON string
+            });
+          const data = await response.json();
+          console.log("data ", data.message)
+          if (data.message && data.message.length > 0) {
             setChatLog([
                 ...chatLog,
                 {
                     chatPrompt: inputPrompt,
-                    botMessage: data.choices[0].message.content,
+                    botMessage: data.message,
                 },
             ]);
         } else {
             console.error('No choices found in the response.');
         }
-        
-          setErr(false);
+          }
+          else if (selectedOption=="Mistral"){
+            console.log('Request Body:', inputPrompt); // Log the request body
+            const response = await fetch("https://1014-34-16-154-14.ngrok-free.app/process-message", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ message: inputPrompt }), // Pass the inputPrompt as JSON string
+              });
+            const data = await response.json();
+            console.log("data ", data.message)
+            if (data.message && data.message.length > 0) {
+              setChatLog([
+                  ...chatLog,
+                  {
+                      chatPrompt: inputPrompt,
+                      botMessage: data.message,
+                  },
+              ]);
+          } else {
+              console.error('No choices found in the response.');
+          }
+            }
+          
       } catch (error) {
           setErr(error);
           console.error('Error:', error);
       }
-      //  Set responseFromAPI back to false after the fetch request is complete
+      // Set responseFromAPI back to false after the fetch request is complete
       setReponseFromAPI(false);
-  }
+      
+      }
     
     }
 
@@ -85,7 +147,7 @@ const Home = () => {
 
     return () => {};
   }, []);
-
+ 
   return (
     <>
       <header>
@@ -216,6 +278,7 @@ const Home = () => {
               onChange={(e) => setInputPrompt(e.target.value)}
               autoFocus
             ></input>
+            
             <button aria-label="form submit" type="submit">
               <svg
                 fill="#ADACBF"
@@ -233,7 +296,18 @@ const Home = () => {
                 />
               </svg>
             </button>
+            <div className="llmselector">
+            <select
+              value={selectedOption}
+              onChange={(e) => setSelectedOption(e.target.value)}
+            >
+              <option value="OpenAI">OpenAI</option>
+              <option value="LLaMa3">LLaMa3</option>
+              <option value="option3">Option 3</option>
+            </select>
+            </div>
           </div>
+          
         </form>
       </section>
     </>
